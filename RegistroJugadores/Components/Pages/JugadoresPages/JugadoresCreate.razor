@@ -1,0 +1,28 @@
+﻿@page "/jugadores/Create"
+
+@inject JugadoresService JugadorsService
+@inject NavigationManager NavigationManager
+
+<>JugadoresCreate</>
+
+@code {
+    public Jugadores jugador { get; set; } = new Jugadores();
+    public string Mensaje { get; set; } = string.Empty;
+    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaJugadores = await JugadorsService.Listar(j => j.JugadorId > 0);
+    }
+
+    public async Task Guardar()
+    {
+        var creado = await JugadorsService.Guardar(jugador);
+
+        if(creado)
+        {
+            NavigationManager.NavigateTo("/jugadores/index");
+        }
+
+    }
+}
