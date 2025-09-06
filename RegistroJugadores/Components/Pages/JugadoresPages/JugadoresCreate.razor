@@ -2,8 +2,47 @@
 
 @inject JugadoresService JugadorsService
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
-<>JugadoresCreate</>
+<PageTitle>Create</PageTitle>
+<EditForm Model="jugador" OnValidSubmit="Guardar" FormName="Jugadores">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class=" card-header text-center">
+                <h5 class="card-title">Crear Jugador</h5>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            @*Nombre*@
+            <div class="mb-3">
+                <label class="col-form-label"><strong>Nombres</strong></label>
+                <InputText class="form-control" @bind-Value="jugador.nombres"></InputText>
+                <ValidationMessage For="(() => jugador.nombres)" />
+            </div>
+
+            @*Partida*@
+            <div class="mb-3">
+                <label class="form-label"><strong>Partidas</strong></label>
+                <InputNumber class="form-control" @bind-Value="jugador.partidas"></InputNumber>
+                <ValidationMessage For="(() => jugador.partidas)" />
+            </div>
+        </div>
+
+        @*footer*@
+        <div class="card-footer text-center mt-2">
+            <a href="/jugadores/index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span>Volver</a>
+            <button type="submit" class="btn btn-primary bi bi-floppy"><span class="bi bi-save>"></span>Guardar</button>
+        </div>
+
+
+    </div>
+
+</EditForm>
+
 
 @code {
     public Jugadores jugador { get; set; } = new Jugadores();

@@ -2,13 +2,14 @@
 
 @inject JugadoresService JugadorsService
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Registro de Jugadores</PageTitle>
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header space-between">
             <h5 class="card-title">Registro de prestamos</h5>
-            <a href="/Jugador/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span>  Crear</a>
+            <a href="/jugadores/Create" class="btn btn-primary"><span class="bi bi-plus-square mt-3"></span>  Crear</a>
         </div>
 
         <div class="card-body">
@@ -43,8 +44,13 @@
                 <div class="col-4">
                     <div class="input-group">
                         <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
-                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar">Buscar</button>
                     </div>
+                </div>
+
+                @*Restaurar*@
+                <div class="col-2">
+                    <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Restablecer">Restablecer</button>
                 </div>
 
                 <table class="table table-hover">
@@ -64,7 +70,7 @@
                                 <td>@jugador.partidas</td>
 
                                 <td class="text-center">
-                                    <a href="/Jugador/Edit/@jugador.JugadorId" class="btn btn-outline-primary bi bi-pencil-square"></a>
+                                    <a href="/Jugador/Edit/@jugador.JugadorId" class="btn btn-outline-primary bi bi-pencil-square">Modificar</a>
                                 </td>
                             </tr>
                         }
@@ -101,9 +107,9 @@
             {
                 ListaJugadores = await JugadorsService.Listar(j => j.nombres.ToLower().Contains(ValorFiltro.ToLower()));
             }
-            else if (Filtro == "Partida")
+            else if (Filtro == "Partida" && int.TryParse(ValorFiltro, out var partidas))
             {
-
+                ListaJugadores = await JugadorsService.Listar(j => j.partidas == partidas);
             }
         }
     }

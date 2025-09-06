@@ -33,6 +33,11 @@ namespace RegistroJugadores.Services
             return await contexto.SaveChangesAsync() > 0;
         }
 
+        public async Task<Jugadores> Buscar(int jugadorId)
+        {
+            await using var contexto = await DbFactory.CreateDbContextAsync();
+            return await contexto.Jugadores.FirstOrDefaultAsync(j => j.JugadorId == jugadorId);
+        }
 
         public async Task<bool> Existe(int jugadorId)
         {
