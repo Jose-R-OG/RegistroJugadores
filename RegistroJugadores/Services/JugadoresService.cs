@@ -9,7 +9,7 @@ public class JugadoresService(IDbContextFactory<Contexto> DbFactory)
 {
     public async Task<bool> Guardar(Jugadores jugador)
     {
-        if (!await Existe(jugador.JugadorId))
+        if (!await Existe(jugador.nombres))
         {
             return await Insertar(jugador);
         }
@@ -39,11 +39,11 @@ public class JugadoresService(IDbContextFactory<Contexto> DbFactory)
         return await contexto.Jugadores.FirstOrDefaultAsync(j => j.JugadorId == jugadorId);
     }
 
-    public async Task<bool> Existe(int jugadorId)
+    public async Task<bool> Existe(string nombres)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.Jugadores
-            .AnyAsync(j => j.JugadorId == jugadorId);
+            .AnyAsync(j => j.nombres == nombres);
     }
 
     public async Task<bool> Eliminar(int jugadorId)

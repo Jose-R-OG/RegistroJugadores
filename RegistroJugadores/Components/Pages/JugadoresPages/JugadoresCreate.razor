@@ -21,6 +21,7 @@
             <div class="mb-3">
                 <label class="col-form-label"><strong>Nombres</strong></label>
                 <InputText class="form-control" @bind-Value="jugador.nombres"></InputText>
+                <label class="form-label"><strong>@Mensaje</strong></label>
                 <ValidationMessage For="(() => jugador.nombres)" />
             </div>
 
@@ -56,6 +57,14 @@
 
     public async Task Guardar()
     {
+        var existe = await JugadorsService.Existe(jugador.nombres);
+
+        if (existe)
+        {
+            Mensaje = "Ya existe un jugador con ese nombre";
+            return;
+        }
+
         var creado = await JugadorsService.Guardar(jugador);
 
         if(creado)

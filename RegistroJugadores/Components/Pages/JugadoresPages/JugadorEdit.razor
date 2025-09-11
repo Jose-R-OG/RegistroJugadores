@@ -22,6 +22,7 @@
             <div class="mb-3">
                 <label class="col-form-label"><strong>Nombres</strong></label>
                 <InputText class="form-control" @bind-Value="jugador.nombres"></InputText>
+                <label class="form-label"><strong>@Mensaje</strong></label>
                 <ValidationMessage For="(() => jugador.nombres)" />
             </div>
 
@@ -35,7 +36,7 @@
 
             @*footer*@
             <div class="card-footer text-center mt-2">
-                <a href="/Prestamo/Index" class="btn btn-secondary">
+            <a href="/jugadores/index" class="btn btn-secondary">
                     <span class="bi bi-arrow-left"></span> Volver
                 </a>
                 <button type="submit" class="btn btn-primary bi bi-floppy" @onclick="Modificar"> Modificar</button>
@@ -57,6 +58,14 @@
     }
     public async Task Modificar()
     {
+        var existe = await JugadorsService.Existe(jugador.nombres);
+
+        if (existe)
+        {
+            Mensaje = "Ya existe un jugador con ese nombre";
+            return;
+        }
+
         var modificado = await JugadorsService.Guardar(jugador);
         if (modificado)
         {
@@ -79,6 +88,11 @@
         {
             Mensaje = "No se pudo eliminar el jugador";
         }
+    }
+
+    private async Task Volver()
+    {
+            NavigationManager.NavigateTo("/jugadores/index");
     }
 
 }
