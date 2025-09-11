@@ -44,13 +44,13 @@
                 <div class="col-4">
                     <div class="input-group">
                         <input class="form-control" @bind="ValorFiltro" placeholder="Buscar" />
-                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar">Buscar</button>
+                        <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Buscar"></button>
                     </div>
                 </div>
 
                 @*Restaurar*@
                 <div class="col-2">
-                    <button type="button" class="btn btn-outline-primary bi bi-search" @onclick="Restablecer">Restablecer</button>
+                    <button type="button" class="btn btn-outline-primary bi bi-arrow-counterclockwise" @onclick="Restablecer"></button>
                 </div>
 
                 <table class="table table-hover">
@@ -70,7 +70,7 @@
                                 <td>@jugador.partidas</td>
 
                                 <td class="text-center">
-                                    <a href="/Jugador/Edit/@jugador.JugadorId" class="btn btn-outline-primary bi bi-pencil-square">Modificar</a>
+                                    <a href="/Jugador/Edit/@jugador.JugadorId" class="btn btn-outline-primary bi bi-pencil-square"></a>
                                 </td>
                             </tr>
                         }
