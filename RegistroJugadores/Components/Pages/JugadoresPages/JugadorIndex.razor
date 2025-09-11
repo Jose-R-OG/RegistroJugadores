@@ -103,11 +103,11 @@
     {
         if(ValorFiltro.Trim() != "")
         {
-            if (Filtro == "Nombre")
+            if (Filtro == nameof(Jugadores.nombres))
             {
                 ListaJugadores = await JugadorsService.Listar(j => j.nombres.ToLower().Contains(ValorFiltro.ToLower()));
             }
-            else if (Filtro == "Partida" && int.TryParse(ValorFiltro, out var partidas))
+            else if (Filtro == nameof(Jugadores.partidas) && int.TryParse(ValorFiltro, out var partidas))
             {
                 ListaJugadores = await JugadorsService.Listar(j => j.partidas == partidas);
             }
