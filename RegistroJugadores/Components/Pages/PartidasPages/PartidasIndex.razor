@@ -35,8 +35,7 @@
                     <InputSelect class="form-select" @bind-value="Filtro">
                         <option value="" selected disabled>Seleccione </option>
                         <option value="PartidaId">Partida Id</option>
-                        <option value="Jugador1Id">Jugador 1</option>
-                        <option value="Jugador2Id">Jugador 2</option>
+                        <option value="Jugadores">Jugadores Id</option>
                         <option value="GanadorId">Ganador </option>
                         <option value="EstadoPartida">Estado Patida</option>
                         <option value="FechaInicio">Fecha inicio</option>
@@ -130,11 +129,15 @@
         if (ValorFiltro.Trim() != "")
         {
             if (Filtro == nameof(Partidas.PartidaId) && int.TryParse(ValorFiltro, out var partidaId)) ListaPartidas = await PartidasService.Listar(p => p.PartidaId == partidaId);
-            else if (Filtro == nameof(Partidas.Jugador1Id) && int.TryParse(ValorFiltro, out var jugador1Id)) ListaPartidas = await PartidasService.Listar(p => p.Jugador1Id == jugador1Id);
-            else if (Filtro == nameof(Partidas.Jugador2Id) && int.TryParse(ValorFiltro, out var jugador2Id)) ListaPartidas = await PartidasService.Listar(p => p.Jugador2Id == jugador2Id);
+            else if (Filtro == "Jugadores") ListaPartidas = await PartidasService.Listar(criterio: p => p.Jugador1Id.ToString().Equals(ValorFiltro) || p.Jugador2Id.ToString().Equals(ValorFiltro));
             else if (Filtro == nameof(Partidas.GanadorId) && int.TryParse(ValorFiltro, out var ganadorId)) ListaPartidas = await PartidasService.Listar(p => p.GanadorId == ganadorId);
             else if (Filtro == nameof(Partidas.EstadoPartida)) ListaPartidas = await PartidasService.Listar(p => p.EstadoPartida.ToLower().Contains(ValorFiltro.ToLower()));
             else if (Filtro == nameof(Partidas.FechaInicio)) ListaPartidas = await PartidasService.Listar(f => f.FechaInicio == fecha);
+            else if (Filtro == nameof(Partidas.FechaFin)) ListaPartidas = await PartidasService.Listar(f => f.FechaFin == fecha);
+        }
+        else
+        {
+            if (Filtro == nameof(Partidas.FechaInicio)) ListaPartidas = await PartidasService.Listar(f => f.FechaInicio == fecha);
             else if (Filtro == nameof(Partidas.FechaFin)) ListaPartidas = await PartidasService.Listar(f => f.FechaFin == fecha);
         }
     }
