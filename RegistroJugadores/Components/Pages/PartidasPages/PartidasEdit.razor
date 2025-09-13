@@ -21,16 +21,20 @@
 
 			@*Body*@
 			<div  class="card-body">
+
+				@*PartidaId No modificable*@
 				<div class="mb-3">
 					<label class="form-label"><strong>PartidaId</strong></label>
 					<InputNumber class="form-control" @bind-Value="Partida.PartidaId" readonly/>
 				</div>
 
+				@*Jugador1 no modificable*@
 				<div class="mb-3">
 					<label class="form-label"><strong>Jugador1Id</strong></label>
 					<InputNumber class="form-control" @bind-Value="Partida.Jugador1Id" readonly />
 				</div>
 
+				@*Jugador2*@
 				<div class="mb-3">
 					<label class="form-label"><strong>Jugador2</strong></label>
 					<InputSelect class="form-select" @bind-Value="Partida.Jugador2Id">
@@ -43,6 +47,7 @@
 					<ValidationMessage For="@(() => Partida.Jugador2Id)" />
 				</div>
 
+				@*Estado Partida*@
 				<div class="mb-3">
 					<label class="form-label"><strong>EstadoPartida</strong></label>
 					<InputSelect class="form-select" @bind-Value="Partida.EstadoPartida">
@@ -54,6 +59,7 @@
 					<ValidationMessage For="@(() => Partida.EstadoPartida)"/>
 				</div>
 
+				@*Ganador*@
 				<div class="mb-3">
 					<label class="form-label"><strong>Ganador</strong></label>
 					<InputSelect class="form-select" @bind-Value="Partida.GanadorId">
@@ -69,7 +75,7 @@
 					<ValidationMessage For="@(() => Partida.GanadorId)" />
 				</div>
 
-
+				@*Turno*@
 				<div class="mb-3">
 					<label class="form-label"><strong>Turno</strong></label>
 					<InputSelect class="form-select" @bind-Value="Partida.TurnoJugadorId">
@@ -85,12 +91,14 @@
 					<ValidationMessage For="@(() => Partida.TurnoJugadorId)" />
 				</div>
 
+				@*Estado tablero*@
 				<div class="mb-3">
 					<label class="form-label"><strong>EstadoTablero</strong></label>
 					<InputText class="form-control" @bind-Value="Partida.EstadoTablero" />
 					<ValidationMessage For="@(() => Partida.EstadoTablero)" />
 				</div>
 
+				@*Fecha fin*@
 				<div class="mb-3">
 					<label class="form-label"><strong>FechaFin</strong></label>
 					<InputDate class="form-control" @bind-Value="Partida.FechaFin"></InputDate>
