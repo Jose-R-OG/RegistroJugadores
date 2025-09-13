@@ -18,6 +18,7 @@ public class Program
         builder.Services.AddDbContextFactory<Contexto>(options => options.UseSqlServer(ConStr));
 
         builder.Services.AddScoped<Services.JugadoresService>();
+        builder.Services.AddScoped<Services.PartidasService>();
 
         var app = builder.Build();
 

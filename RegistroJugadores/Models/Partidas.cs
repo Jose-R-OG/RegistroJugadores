@@ -24,7 +24,6 @@ public class Partidas
     public DateTime FechaInicio { get; set; } = DateTime.UtcNow;
     public DateTime? FechaFin { get; set; }
 
-    // Propiedades de navegación
     [ForeignKey(nameof(Jugador1Id))]
     public virtual Jugadores Jugador1 { get; set; }
 

@@ -58,15 +58,8 @@
     }
     public async Task Modificar()
     {
-        var existe = await JugadorsService.Existe(jugador.nombres);
 
-        if (existe)
-        {
-            Mensaje = "Ya existe un jugador con ese nombre";
-            return;
-        }
-
-        var modificado = await JugadorsService.Guardar(jugador);
+        var modificado = await JugadorsService.Modificar(jugador);
         if (modificado)
         {
             NavigationManager.NavigateTo("/jugadores/index");

@@ -16,7 +16,7 @@
 
             @*labels*@
             <div class="row">
-                
+
                 @*Filtar por*@
                 <div class="col-3">
                     <label class="col-form-label"><strong>Filtrar por</strong></label>
@@ -34,8 +34,8 @@
                 <div class="col-3">
                     <InputSelect class="form-select" @bind-value="Filtro">
                         <option value="" selected disabled>Seleccione </option>
-                        <option value="Nombre">Nombres</option>
-                        <option value="Partida">Partida</option>
+                        <option value="nombres">Nombres</option>
+                        <option value="partidas">Partida</option>
                     </InputSelect>
                 </div>
 
@@ -78,12 +78,12 @@
                 </table>
 
 
-             </div>
+            </div>
 
-             <div class="card-footer space-between">
-                 <label>Cantidad: @ListaJugadores.Count()</label>
-             </div>
-         </div>
+            <div class="card-footer space-between">
+                <label>Cantidad: @ListaJugadores.Count()</label>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -101,7 +101,7 @@
 
     private async Task Buscar()
     {
-        if(ValorFiltro.Trim() != "")
+        if (ValorFiltro.Trim() != "")
         {
             if (Filtro == nameof(Jugadores.nombres))
             {
