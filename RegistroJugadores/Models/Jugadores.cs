@@ -12,5 +12,7 @@ public class Jugadores
 
     [Required(ErrorMessage = "Este campo es requerido")]
     [Range(1, int.MaxValue, ErrorMessage = "Las partidas no pueden ser menor a 1")]
-    public int partidas { get; set; }
+    public int victorias { get; set; }
+    public int Derrotas { get; set; }   
+    public int Empate { get; set; }
 }

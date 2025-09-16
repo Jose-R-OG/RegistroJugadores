@@ -30,11 +30,17 @@ namespace RegistroJugadores.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JugadorId"));
 
+                    b.Property<int>("Derrotas")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Empate")
+                        .HasColumnType("int");
+
                     b.Property<string>("nombres")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("partidas")
+                    b.Property<int>("victorias")
                         .HasColumnType("int");
 
                     b.HasKey("JugadorId");

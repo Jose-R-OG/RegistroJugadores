@@ -130,7 +130,6 @@
         if (ValorFiltro.Trim() != "")
         {
             if (Filtro == nameof(Partidas.PartidaId) && int.TryParse(ValorFiltro, out var partidaId)) ListaPartidas = await PartidasService.Listar(p => p.PartidaId == partidaId);
-            else if (Filtro == "Jugadores") ListaPartidas = await PartidasService.Listar(criterio: p => p.Jugador1Id.ToString().Equals(ValorFiltro) || p.Jugador2Id.ToString().Equals(ValorFiltro));
             else if (Filtro == nameof(Partidas.GanadorId) && int.TryParse(ValorFiltro, out var ganadorId)) ListaPartidas = await PartidasService.Listar(p => p.GanadorId == ganadorId);
             else if (Filtro == nameof(Partidas.EstadoPartida)) ListaPartidas = await PartidasService.Listar(p => p.EstadoPartida.ToLower().Contains(ValorFiltro.ToLower()));
             else if (Filtro == nameof(Partidas.FechaInicio)) ListaPartidas = await PartidasService.Listar(f => f.FechaInicio == fecha);
