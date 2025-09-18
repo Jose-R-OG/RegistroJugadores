@@ -51,7 +51,7 @@ public class Contexto : DbContext
             entity.HasOne(m => m.Partida)
                   .WithMany()
                   .HasForeignKey(m => m.PartidaId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 
