@@ -86,12 +86,12 @@
                         {
                             <tr>
                                 <td>@partidas.PartidaId</td>
-                                <td>@partidas.Jugador1Id</td>
-                                <td>@partidas.Jugador2Id</td>
-                                <td>@partidas.GanadorId</td>
+                                <td>@partidas.Jugador1.nombres</td>
+                                <td>@partidas.Jugador2.nombres</td>
+                                <td>@partidas.Ganador.nombres</td>
                                 <td>@partidas.EstadoPartida</td>
-                                <td>@partidas.FechaInicio</td>
-                                <td>@partidas.FechaFin</td>
+                                <td>@partidas.FechaInicio.ToString("dd/mm/yyyy")</td>
+                                <td>@partidas.FechaFin?.ToString("dd/mm/yyyy")</td>
 
                                 <td class="text-center">
                                     <a href="/partidas/Edit/@partidas.PartidaId" class="btn btn-outline-primary bi bi-pencil-square"></a>

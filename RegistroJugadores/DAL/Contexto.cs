@@ -9,6 +9,7 @@ public class Contexto : DbContext
 
     public virtual DbSet<Jugadores> Jugadores { get; set; }
     public virtual DbSet<Partidas> Partidas { get; set; }
+    public virtual DbSet<Movimientos> Movimientos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,27 +18,40 @@ public class Contexto : DbContext
         modelBuilder.Entity<Partidas>(entity =>
         {
 
-            entity.HasOne(p => p.Jugador1)
+            entity.HasOne(partidas => partidas.Jugador1)
                   .WithMany()
-                  .HasForeignKey(p => p.Jugador1Id)
+                  .HasForeignKey(partidas => partidas.Jugador1Id)
                   .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasOne(p => p.Jugador2)
+            entity.HasOne(partidas => partidas.Jugador2)
                   .WithMany()
-                  .HasForeignKey(p => p.Jugador2Id)
+                  .HasForeignKey(partidas => partidas.Jugador2Id)
                   .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasOne(p => p.Ganador)
+            entity.HasOne(partidas => partidas.Ganador)
                   .WithMany()
-                  .HasForeignKey(p => p.GanadorId)
+                  .HasForeignKey(partidas => partidas.GanadorId)
                   .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasOne(p => p.TurnoJugador)
+            entity.HasOne(partidas => partidas.TurnoJugador)
                   .WithMany()
-                  .HasForeignKey(p => p.TurnoJugadorId)
+                  .HasForeignKey(partidas => partidas.TurnoJugadorId)
                   .OnDelete(DeleteBehavior.NoAction);
 
 
+        });
+
+        modelBuilder.Entity<Movimientos>(entity =>
+        {
+            entity.HasOne(m => m.Jugador)
+                  .WithMany(j => j.Movimientos)
+                  .HasForeignKey(m => m.JugadorId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(m => m.Partida)
+                  .WithMany()
+                  .HasForeignKey(m => m.PartidaId)
+                  .OnDelete(DeleteBehavior.Restrict);
         });
     }
 

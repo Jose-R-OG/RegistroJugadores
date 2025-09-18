@@ -35,7 +35,9 @@
                     <InputSelect class="form-select" @bind-value="Filtro">
                         <option value="" selected disabled>Seleccione </option>
                         <option value="nombres">Nombres</option>
-                        <option value="partidas">Partida</option>
+                        <option value="victorias">Victorias</option>
+                        <option value="Empate">Empates</option>
+                        <option value="Derrotas">Derrotas</option>
                     </InputSelect>
                 </div>
 
@@ -58,7 +60,9 @@
                         <tr>
                             <th>JugadorId</th>
                             <th>Nombres</th>
-                            <th>Partida</th>
+                            <th>Victorias</th>
+                            <th>Empates</th>
+                            <th>Derrotas</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,6 +72,9 @@
                                 <td>@jugador.JugadorId</td>
                                 <td>@jugador.nombres</td>
                                 <td>@jugador.victorias</td>
+                                <td>@jugador.Empate</td>
+                                <td>@jugador.Derrotas</td>
+
 
                                 <td class="text-center">
                                     <a href="/Jugador/Edit/@jugador.JugadorId" class="btn btn-outline-primary bi bi-pencil-square"></a>
@@ -81,7 +88,12 @@
             </div>
 
             <div class="card-footer space-between">
-                <label>Cantidad: @ListaJugadores.Count()</label>
+                <label class="ms-3"><strong>Cantidad: </strong> @ListaJugadores.Count()</label>
+                <div class="col-8">
+                    <label class="ms-5"><strong>Total Victorias: </strong>@ListaJugadores.Sum(jugador => jugador.victorias)</label>
+                    <label class="ms-5"><strong>Total Empates: </strong>@ListaJugadores.Sum(jugador => jugador.Empate)</label>
+                    <label class="ms-5"><strong>Total Derrotas: </strong>@ListaJugadores.Sum(jugador => jugador.Derrotas)</label>
+                </div>
             </div>
         </div>
     </div>
@@ -107,9 +119,17 @@
             {
                 ListaJugadores = await JugadorsService.Listar(j => j.nombres.ToLower().Contains(ValorFiltro.ToLower()));
             }
-            else if (Filtro == nameof(Jugadores.victorias) && int.TryParse(ValorFiltro, out var partidas))
+            else if (Filtro == nameof(Jugadores.victorias) && int.TryParse(ValorFiltro, out var victorias))
             {
-                ListaJugadores = await JugadorsService.Listar(j => j.victorias == partidas);
+                ListaJugadores = await JugadorsService.Listar(jugador => jugador.victorias == victorias);
+            }
+            else if (Filtro == nameof(Jugadores.Derrotas) && int.TryParse(ValorFiltro, out var Derrotas))
+            {
+                ListaJugadores = await JugadorsService.Listar(jugador => jugador.Derrotas == Derrotas);
+            }
+            else if (Filtro == nameof(Jugadores.Empate) && int.TryParse(ValorFiltro, out var Empates))
+            {
+                ListaJugadores = await JugadorsService.Listar(jugador => jugador.Empate == Empates);
             }
         }
     }
