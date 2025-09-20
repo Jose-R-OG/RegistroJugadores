@@ -120,6 +120,7 @@
 					{
 						<button type="submit" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"> Modificar</button>
 						<button type="button" class="btn btn-outline-danger bi bi-trash-fill" @onclick="Eliminar"> Eliminar</button>
+						<button type="button" class="btn btn-outline-primary" @onclick="Renaudar"> Renaudar</button>
 					}
 					<a href="/partidas/index" class="btn btn-outline-secondary bi bi-arrow-bar-left"> Volver</a>
 				</div>
@@ -175,5 +176,10 @@
 			AlertMessage = "Error al eliminar el partida.";
 			AlertType = "danger";
 		}
+	}
+
+	public async Task Renaudar()
+	{
+		navigationManager.NavigateTo("/game/" + Partida.PartidaId);
 	}
 }

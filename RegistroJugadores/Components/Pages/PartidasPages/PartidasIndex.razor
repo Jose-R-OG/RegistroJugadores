@@ -75,6 +75,7 @@
                             <th>Jugador2 Id</th>
                             <th>GanadorId</th>
                             <th>Estado partida</th>
+                            <th>Estado tablero</th>
                             <th>Fecha inicio</th>
                             <th>Fecha Fin</th>
 
@@ -87,11 +88,12 @@
                             <tr>
                                 <td>@partidas.PartidaId</td>
                                 <td>@partidas.Jugador1.nombres</td>
-                                <td>@partidas.Jugador2.nombres</td>
-                                <td>@partidas.Ganador.nombres</td>
+                                <td>@(partidas.Jugador2?.nombres ?? "N/A")</td>
+                                <td>@(partidas.Ganador?.nombres ?? "N/A")</td>
                                 <td>@partidas.EstadoPartida</td>
-                                <td>@partidas.FechaInicio.ToString("dd/mm/yyyy")</td>
-                                <td>@partidas.FechaFin?.ToString("dd/mm/yyyy")</td>
+                                <td>@partidas.EstadoTablero</td>
+                                <td>@partidas.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@partidas.FechaFin?.ToString("dd/MM/yyyy HH:mm")</td>
 
                                 <td class="text-center">
                                     <a href="/partidas/Edit/@partidas.PartidaId" class="btn btn-outline-primary bi bi-pencil-square"></a>

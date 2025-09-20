@@ -19,6 +19,7 @@ public class Program
 
         builder.Services.AddScoped<Services.JugadoresService>();
         builder.Services.AddScoped<Services.PartidasService>();
+        builder.Services.AddScoped<Services.MovimientosService>();
 
         var app = builder.Build();
 

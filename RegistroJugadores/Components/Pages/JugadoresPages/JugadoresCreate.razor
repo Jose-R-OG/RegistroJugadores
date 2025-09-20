@@ -25,23 +25,34 @@
                 <ValidationMessage For="(() => jugador.nombres)" />
             </div>
 
-            @*Partida*@
+            @*Victorias*@
             <div class="mb-3">
-                <label class="form-label"><strong>Partidas</strong></label>
+                <label class="form-label"><strong>Victorias</strong></label>
                 <InputNumber class="form-control" @bind-Value="jugador.victorias"></InputNumber>
                 <ValidationMessage For="(() => jugador.victorias)" />
             </div>
+
+            @*Empates*@
+            <div class="mb-3">
+                <label class="form-label"><strong>Empates</strong></label>
+                <InputNumber class="form-control" @bind-Value="jugador.Empate"></InputNumber>
+                <ValidationMessage For="(() => jugador.Empate)" />
+            </div>
+
+            @*Derrotas*@
+            <div class="mb-3">
+                <label class="form-label"><strong>Derrotas</strong></label>
+                <InputNumber class="form-control" @bind-Value="jugador.Derrotas"></InputNumber>
+                <ValidationMessage For="(() => jugador.Derrotas)" />
+            </div>
         </div>
+    </div>
 
         @*footer*@
         <div class="card-footer text-center mt-2">
             <a href="/jugadores/index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span>Volver</a>
             <button type="submit" class="btn btn-primary bi bi-floppy"><span class="bi bi-save>"></span>Guardar</button>
         </div>
-
-
-    </div>
-
 </EditForm>
 
 

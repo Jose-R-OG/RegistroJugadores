@@ -1,0 +1,70 @@
+﻿@page "/"
+
+@inject PartidasService partidasService
+@inject JugadoresService jugadoresService
+@inject NavigationManager navigationManager
+@rendermode InteractiveServer
+
+<PageTitle>TicTacToe</PageTitle>
+
+<div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
+
+    <div class="game-container">
+        <div class="selection-screen">
+            <h1>Elige tu jugador</h1>
+            <div class="player-buttons">
+                <label class="form-label"><strong>Jugador X</strong></label>
+                <InputSelect class="form-select" @bind-Value="Partida.Jugador1Id">
+                    <option value="0" selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador2Id)">@jugador.nombres</option>
+                    }
+                </InputSelect>
+
+                <label class="form-label"><strong>Jugador O</strong></label>
+                <InputSelect class="form-select" @bind-Value="Partida.Jugador2Id">
+                    <option value=null selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador1Id)">@jugador.nombres</option>
+                    }
+                </InputSelect>
+            </div>
+            <button class="btn btn-success btn-lg mt-4"
+                    disabled="@(Partida.Jugador1Id == 0)"
+                    @onclick="StartGame">
+                Iniciar Partida
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public Partidas Partida { get; set; } = new Partidas();
+    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        ListaJugadores = await jugadoresService.Listar(criterio: j => j.JugadorId > 0);
+    }
+
+    public async Task StartGame()
+    {
+        if (Partida.Jugador2Id == null)
+            Partida.EstadoPartida = "Pendiente";
+        else
+            Partida.EstadoPartida = "En Curso";
+
+        Partida.TurnoJugadorId = Partida.Jugador1Id;
+        Partida.EstadoTablero = "---------";
+
+
+        var creado = await partidasService.Guardar(Partida);
+        if (creado)
+        {
+            navigationManager.NavigateTo("/game/" + Partida.PartidaId);
+        }
+    }
+}
