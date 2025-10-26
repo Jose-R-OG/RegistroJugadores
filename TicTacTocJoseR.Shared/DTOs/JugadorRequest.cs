@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicTacTocJoseR.Shared.DTOs;
 
-public record MovimientoResponse(
-    int PartidaId,
-    string Jugador,
-    int PosicionFila,
-    int PosicionColumna
-);
+public record JugadorRequest(
+    string Nombres, 
+    string Email
+    );
