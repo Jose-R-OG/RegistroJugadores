@@ -1,6 +1,6 @@
 ﻿@page "/jugadores/index"
 
-@inject JugadoresService JugadorsService
+@inject JugadoresApiService jugadoresApiService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
@@ -100,20 +100,29 @@
 </div>
 
 @code {
-
-    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+    public List<JugadorResponse>? ListaJugadores;
 
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
+    private bool loadingJugadores = false;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaJugadores = await JugadorsService.Listar(j => j.JugadorId > 0);
+    }
+
+    private async Task LoadPartidas()
+    {
+        var response = await jugadoresApiService.GetJugadoresAsync();
+
+        if (response is Resource<List<JugadorResponse>>.Success success)
+        {
+            ListaJugadores = success.Data;
+        }
     }
 
     private async Task Buscar()
     {
-        if (ValorFiltro.Trim() != "")
+       /* if (ValorFiltro.Trim() != "")
         {
             if (Filtro == nameof(Jugadores.nombres))
             {
@@ -131,7 +140,7 @@
             {
                 ListaJugadores = await JugadorsService.Listar(jugador => jugador.Empate == Empates);
             }
-        }
+        }*/
     }
 
     private async Task Restablecer()
