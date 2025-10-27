@@ -80,14 +80,14 @@
 
         if (response is Resource<List<JugadorResponse>>.Success success)
         {
-            Console.WriteLine("Bobo");
+
             ListaJugadores = success.Data;
         }
         else if (response is Resource<List<JugadorResponse>>.Error error)
         {
-            Console.WriteLine("Bobo");
+            return;
         }
-        Console.WriteLine("Bobo");
+ 
     }
 
 

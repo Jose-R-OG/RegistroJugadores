@@ -1,9 +1,8 @@
-﻿@page "/game/{PartidaId:int}"
-@*
-@rendermode InteractiveServer
-@inject PartidasService partidasService
-@inject JugadoresService jugadoresService
-@inject MovimientosService movimientosService
+﻿@*@page "/game/{partidaId:int}"
+
+@inject IPartidaApiService partidasService
+@inject IJugadoresApiService jugadoresService
+@inject IMovimientosApiService movimientosService
 
 <PageTitle>Home</PageTitle>
 
@@ -42,18 +41,18 @@
     private PlayerType? winner;
     private bool esEmpate;
     private int? _currentPlayerId;
-    private Jugadores? _currentPlayer = new Jugadores();
+    private JugadorResponse? _currentPlayer;
 
 
 
     [Parameter]
-    public int PartidaId { get; set; }
-    public Partidas Partida { get; set; } = new Partidas();
-    public Movimientos Movimiento { get; set; }
+    public int partidaId { get; set; }
+    public PartidaResponse Partida;
+    public MovimientoResponse Movimiento { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Partida = await partidasService.Buscar(PartidaId);
+        Partida = await partidasService.GetPartidaAsync(partidaId);
         _currentPlayerId = Partida.Jugador1Id;
         _currentPlayer = await jugadoresService.Buscar(_currentPlayerId ?? 0);
         if (Partida.EstadoTablero != "---------")
