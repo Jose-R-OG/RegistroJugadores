@@ -14,8 +14,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TicTacTocJoseR.Shared\TicTacTocJoseR.Shared.csproj" />
-  </ItemGroup>
-
 </Project>
