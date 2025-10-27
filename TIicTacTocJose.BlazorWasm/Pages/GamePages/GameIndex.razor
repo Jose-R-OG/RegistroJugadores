@@ -1,0 +1,118 @@
+﻿@page "/"
+
+@inject IPartidaApiService partidaApiService
+@inject IJugadoresApiService jugadoresApiService
+@inject NavigationManager navigationManager
+
+<PageTitle>TicTacToe</PageTitle>
+
+<div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
+
+    <div class="game-container">
+        <div class="selection-screen">
+            <h1>Elige tu jugador</h1>
+            <div class="player-buttons">
+                <label class="form-label"><strong>Jugador X</strong></label>
+                <InputSelect class="form-select" @bind-Value="JugadorX">
+                    <option value="0" selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == JugadorO)">@jugador.Nombres</option>
+                    }
+                </InputSelect>
+
+                <label class="form-label"><strong>Jugador O</strong></label>
+                <InputSelect class="form-select" @bind-Value="JugadorO">
+                    <option value=null selected disabled>Elija una opci&oacute;n</option>
+                    @foreach (var jugador in ListaJugadores)
+                    {
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == JugadorX)">@jugador.Nombres</option>
+                    }
+                </InputSelect>
+            </div>
+            <button class="btn btn-success btn-lg mt-4"
+                    disabled="@(JugadorX == 0 || JugadorO == 0)"
+                    @onclick="StartGame">
+                Iniciar Partida
+            </button>
+
+            <hr class="my-4" />
+
+            <h4>Unirse a Partida Existente</h4>
+            <div class="form-group">
+                <label for="partidaId">ID de la Partida:</label>
+                <div class="input-group">
+                    <input id="partidaId" type="number" class="form-control" @bind="partidaId" placeholder="ID de la partida" />
+                    <button class="btn btn-outline-secondary" type="button" @onclick="OpenPartidasModal">
+                        <span class="bi-search-icon"></span>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-warning btn-lg mt-2"
+                    disabled="@(partidaId == 0)"
+                    @onclick="JoinGame">
+                Unirse a Partida
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private int partidaId;
+    public List<JugadorResponse> ListaJugadores = [];
+    private int JugadorX { get; set; }
+    private int JugadorO { get; set; }
+    private bool showModal = false;
+
+    private string? jugador1Nombre { get; set; }
+    private string? jugador2Nombre { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoadJugadores();
+
+    }
+
+    private async Task LoadJugadores()
+    {
+        var response = await jugadoresApiService.GetJugadoresAsync();
+
+        if (response is Resource<List<JugadorResponse>>.Success success)
+        {
+
+            ListaJugadores = success.Data;
+        }
+        else if (response is Resource<List<JugadorResponse>>.Error error)
+        {
+            return;
+        }
+ 
+    }
+
+
+    public async Task StartGame()
+    {
+        var response = await partidaApiService.PostPartida(JugadorX, JugadorO);
+
+        if (response is Resource<PartidaResponse>.Error error)
+        {
+            return;
+        }
+
+        partidaId = response.Data?.PartidaId ?? 0;
+
+        navigationManager.NavigateTo("/game/" + partidaId);
+
+    }
+
+    public async Task JoinGame()
+    {
+        navigationManager.NavigateTo("/game/" + partidaId);
+    }
+
+    private void OpenPartidasModal()
+    {
+        showModal = true;
+    }
+}

@@ -5,6 +5,10 @@ VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistroJugadores", "RegistroJugadores\RegistroJugadores.csproj", "{DF4DE5B9-1FB1-411B-A4F5-5D197B13E22D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacTocJoseR.Shared", "TicTacTocJoseR.Shared\TicTacTocJoseR.Shared.csproj", "{97E1ACD4-45BD-4016-86ED-85280549B218}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TIicTacTocJose.BlazorWasm", "TIicTacTocJose.BlazorWasm\TIicTacTocJose.BlazorWasm.csproj", "{03F67D95-6B90-4AB3-BCF3-CA837A3E9E7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{DF4DE5B9-1FB1-411B-A4F5-5D197B13E22D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF4DE5B9-1FB1-411B-A4F5-5D197B13E22D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF4DE5B9-1FB1-411B-A4F5-5D197B13E22D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97E1ACD4-45BD-4016-86ED-85280549B218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E1ACD4-45BD-4016-86ED-85280549B218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E1ACD4-45BD-4016-86ED-85280549B218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E1ACD4-45BD-4016-86ED-85280549B218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03F67D95-6B90-4AB3-BCF3-CA837A3E9E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03F67D95-6B90-4AB3-BCF3-CA837A3E9E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03F67D95-6B90-4AB3-BCF3-CA837A3E9E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03F67D95-6B90-4AB3-BCF3-CA837A3E9E7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
