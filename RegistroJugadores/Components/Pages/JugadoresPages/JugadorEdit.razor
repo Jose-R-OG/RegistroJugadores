@@ -1,105 +1,63 @@
 ﻿@page "/Jugador/Edit/{JugadorId:int}"
 
-@inject JugadoresService JugadorsService
+@inject IJugadoresApiService jugadoresApiService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Editar Jugador</PageTitle>
-<EditForm Model="jugador" OnValidSubmit="Modificar" FormName="Jugadores">
-    <DataAnnotationsValidator />
-    <ValidationSummary/>
-
-    <div class="container">
-        <div class="card shadow-lg">
-            <div class=" card-header text-center">
-                <h5 class="card-title">Modificar Jugador</h5>
-            </div>
+<PageTitle>Create</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        <div class=" card-header text-center">
+            <h5 class="card-title">Crear Jugador</h5>
         </div>
-
-        <div class="card-body">
-
-            @*Nombre*@
-            <div class="mb-3">
-                <label class="col-form-label"><strong>Nombres</strong></label>
-                <InputText class="form-control" @bind-Value="jugador.nombres"></InputText>
-                <label class="form-label"><strong>@Mensaje</strong></label>
-                <ValidationMessage For="(() => jugador.nombres)" />
-            </div>
-
-            @*Victorias*@
-            <div class="mb-3">
-                <label class="form-label"><strong>Victorias</strong></label>
-                <InputNumber class="form-control" @bind-Value="jugador.victorias"></InputNumber>
-                <ValidationMessage For="(() => jugador.victorias)" />
-            </div>
-
-            @*Empates*@
-            <div class="mb-3">
-                <label class="form-label"><strong>Empates</strong></label>
-                <InputNumber class="form-control" @bind-Value="jugador.Empate"></InputNumber>
-                <ValidationMessage For="(() => jugador.Empate)" />
-            </div>
-
-            @*Derrotas*@
-            <div class="mb-3">
-                <label class="form-label"><strong>Derrotas</strong></label>
-                <InputNumber class="form-control" @bind-Value="jugador.Derrotas"></InputNumber>
-                <ValidationMessage For="(() => jugador.Derrotas)" />
-            </div>
-        </div>
-
-            @*footer*@
-            <div class="card-footer text-center mt-2">
-            <a href="/jugadores/index" class="btn btn-secondary">
-                    <span class="bi bi-arrow-left"></span> Volver
-                </a>
-                <button type="submit" class="btn btn-primary bi bi-floppy" @onclick="Modificar"> Modificar</button>
-                <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
-            </div>
     </div>
 
-</EditForm>
+    <div class="card-body">
+
+        @*Nombre*@
+        <div class="mb-3">
+            <label class="col-form-label"><strong>Nombres</strong></label>
+            <InputText class="form-control" @bind-Value="Nombre"></InputText>
+        </div>
+
+        @*Victorias*@
+        <div class="mb-3">
+            <label class="form-label"><strong>Email</strong></label>
+            <InputText class="form-control" @bind-Value="Email"></InputText>
+        </div>
+        @*footer*@
+    </div>
+
+    <div class="card-footer text-center mt-2">
+        <a href="/jugadores/index" class="btn btn-secondary"><span class="bi bi-arrow-left"></span>Volver</a>
+        <button type="button" class="btn btn-outline-success bi bi-check-circle" @onclick="Modificar"><span class="bi bi-save>"></span>Modificar</button>
+
+    </div>
+</div>
 @code {
     [Parameter]
     public int JugadorId { get; set; }
-    public Jugadores jugador { get; set; } = new Jugadores();
-    public string Mensaje { get; set; } = string.Empty;
-    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+    public string Nombre { get; set; } 
+    public string Email { get; set; } 
+
     protected override async Task OnInitializedAsync()
     {
-        jugador = await JugadorsService.Buscar(JugadorId);
-        ListaJugadores = await JugadorsService.Listar(j => j.JugadorId > 0);
+        var jugador = await jugadoresApiService.GetJugadorAsync(JugadorId);
+        Nombre = jugador.Data.Nombres;
+        Email = jugador.Data.Email;
+
     }
+
     public async Task Modificar()
     {
-
-        var modificado = await JugadorsService.Modificar(jugador);
-        if (modificado)
+        var modificado = await jugadoresApiService.PutJugador(JugadorId, Nombre, Email);
+        if(modificado is Resource<JugadorResponse>.Success success)
         {
             NavigationManager.NavigateTo("/jugadores/index");
         }
-        else
-        {
-            Mensaje = "No se pudo modificar el jugador";
-        }
-    }
 
-    private async Task Eliminar()
-    {
-        var eliminado = await JugadorsService.Eliminar(JugadorId);
-        if (eliminado)
-        {
-            NavigationManager.NavigateTo("/jugadores/index");
-        }
-        else
-        {
-            Mensaje = "No se pudo eliminar el jugador";
-        }
-    }
 
-    private async Task Volver()
-    {
-            NavigationManager.NavigateTo("/jugadores/index");
+        
     }
 
 }
