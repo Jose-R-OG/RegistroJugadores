@@ -1,6 +1,6 @@
 ﻿@page "/jugadores/index"
 
-@inject JugadoresService JugadorsService
+@inject IJugadoresApiService jugadoresApiService
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
@@ -34,10 +34,8 @@
                 <div class="col-3">
                     <InputSelect class="form-select" @bind-value="Filtro">
                         <option value="" selected disabled>Seleccione </option>
-                        <option value="nombres">Nombres</option>
-                        <option value="victorias">Victorias</option>
-                        <option value="Empate">Empates</option>
-                        <option value="Derrotas">Derrotas</option>
+                        <option value="Nombres">Nombres</option>
+                        <option value="Email">Email</option>
                     </InputSelect>
                 </div>
 
@@ -60,9 +58,7 @@
                         <tr>
                             <th>JugadorId</th>
                             <th>Nombres</th>
-                            <th>Victorias</th>
-                            <th>Empates</th>
-                            <th>Derrotas</th>
+                            <th>Email</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,11 +66,8 @@
                         {
                             <tr>
                                 <td>@jugador.JugadorId</td>
-                                <td>@jugador.nombres</td>
-                                <td>@jugador.victorias</td>
-                                <td>@jugador.Empate</td>
-                                <td>@jugador.Derrotas</td>
-
+                                <td>@jugador.Nombres</td>
+                                <td>@jugador.Email</td>
 
                                 <td class="text-center">
                                     <a href="/Jugador/Edit/@jugador.JugadorId" class="btn btn-outline-primary bi bi-pencil-square"></a>
@@ -89,11 +82,6 @@
 
             <div class="card-footer space-between">
                 <label class="ms-3"><strong>Cantidad: </strong> @ListaJugadores.Count()</label>
-                <div class="col-8">
-                    <label class="ms-5"><strong>Total Victorias: </strong>@ListaJugadores.Sum(jugador => jugador.victorias)</label>
-                    <label class="ms-5"><strong>Total Empates: </strong>@ListaJugadores.Sum(jugador => jugador.Empate)</label>
-                    <label class="ms-5"><strong>Total Derrotas: </strong>@ListaJugadores.Sum(jugador => jugador.Derrotas)</label>
-                </div>
             </div>
         </div>
     </div>
@@ -101,42 +89,51 @@
 
 @code {
 
-    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+    public List<JugadorResponse> ListaJugadores { get; set; } = new List<JugadorResponse>();
 
     public string Filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        ListaJugadores = await JugadorsService.Listar(j => j.JugadorId > 0);
+        await LoadJugadores();
+    }
+
+    private async Task LoadJugadores()
+    {
+        var response = await jugadoresApiService.GetJugadoresAsync();
+        if(response is Resource<List<JugadorResponse>>.Success success)
+        {
+            ListaJugadores = success.Data;
+        }
+        else if(response is Resource<List<JugadorResponse>>.Error error)
+        {
+            Console.WriteLine("Hay bobo socio");
+        }
     }
 
     private async Task Buscar()
     {
         if (ValorFiltro.Trim() != "")
         {
-            if (Filtro == nameof(Jugadores.nombres))
+            if (Filtro == nameof(JugadorResponse.Nombres))
             {
-                ListaJugadores = await JugadorsService.Listar(j => j.nombres.ToLower().Contains(ValorFiltro.ToLower()));
+                ListaJugadores = ListaJugadores.Where(j => j.Nombres.ToLower().Contains(ValorFiltro.ToLower())).ToList();
             }
-            else if (Filtro == nameof(Jugadores.victorias) && int.TryParse(ValorFiltro, out var victorias))
+            else if (Filtro == nameof(JugadorResponse.Email))
             {
-                ListaJugadores = await JugadorsService.Listar(jugador => jugador.victorias == victorias);
+                ListaJugadores = ListaJugadores.Where(j => j.Email.ToLower().Contains(ValorFiltro.ToLower())).ToList();
             }
-            else if (Filtro == nameof(Jugadores.Derrotas) && int.TryParse(ValorFiltro, out var Derrotas))
-            {
-                ListaJugadores = await JugadorsService.Listar(jugador => jugador.Derrotas == Derrotas);
-            }
-            else if (Filtro == nameof(Jugadores.Empate) && int.TryParse(ValorFiltro, out var Empates))
-            {
-                ListaJugadores = await JugadorsService.Listar(jugador => jugador.Empate == Empates);
-            }
+        }
+        else
+        {
+            await LoadJugadores();
         }
     }
 
     private async Task Restablecer()
     {
-        ListaJugadores = await JugadorsService.Listar(j => j.JugadorId > 0);
+        await LoadJugadores();
         Filtro = string.Empty;
         ValorFiltro = string.Empty;
     }

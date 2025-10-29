@@ -1,6 +1,7 @@
-using RegistroJugadores.Components;
 using Microsoft.EntityFrameworkCore;
+using RegistroJugadores.Components;
 using RegistroJugadores.DAL;
+using RegistroJugadores.Services;
 
 namespace RegistroJugadores;
 
@@ -16,6 +17,11 @@ public class Program
 
         var ConStr = builder.Configuration.GetConnectionString("SqlConStr");
         builder.Services.AddDbContextFactory<Contexto>(options => options.UseSqlServer(ConStr));
+
+        builder.Services.AddHttpClient<IJugadoresApiService, JugadoresApiService>(client =>
+        {
+            client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
+        });
 
         builder.Services.AddScoped<Services.JugadoresService>();
         builder.Services.AddScoped<Services.PartidasService>();
