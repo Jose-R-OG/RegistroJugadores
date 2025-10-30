@@ -23,6 +23,11 @@ public class Program
             client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
         });
 
+        builder.Services.AddHttpClient<IPartidaApiService, PartidaApiService>(client =>
+        {
+            client.BaseAddress = new Uri("https://gestionhuacalesapi.azurewebsites.net/");
+        });
+
         builder.Services.AddScoped<Services.JugadoresService>();
         builder.Services.AddScoped<Services.PartidasService>();
         builder.Services.AddScoped<Services.MovimientosService>();
