@@ -1,7 +1,7 @@
 ﻿@page "/"
 
-@inject PartidasService partidasService
-@inject JugadoresService jugadoresService
+@inject IPartidaApiService partidaApiService
+@inject IJugadoresApiService jugadoresApiService
 @inject NavigationManager navigationManager
 @rendermode InteractiveServer
 
@@ -14,57 +14,102 @@
             <h1>Elige tu jugador</h1>
             <div class="player-buttons">
                 <label class="form-label"><strong>Jugador X</strong></label>
-                <InputSelect class="form-select" @bind-Value="Partida.Jugador1Id">
+                <InputSelect class="form-select" @bind-Value="Jugador1Id">
                     <option value="0" selected disabled>Elija una opci&oacute;n</option>
                     @foreach (var jugador in ListaJugadores)
                     {
-                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador2Id)">@jugador.nombres</option>
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Jugador2Id)">@jugador.Nombres</option>
                     }
                 </InputSelect>
 
                 <label class="form-label"><strong>Jugador O</strong></label>
-                <InputSelect class="form-select" @bind-Value="Partida.Jugador2Id">
+                <InputSelect class="form-select" @bind-Value="Jugador2Id">
                     <option value=null selected disabled>Elija una opci&oacute;n</option>
                     @foreach (var jugador in ListaJugadores)
                     {
-                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Partida.Jugador1Id)">@jugador.nombres</option>
+                        <option value=@jugador.JugadorId disabled="@(jugador.JugadorId == Jugador1Id)">@jugador.Nombres</option>
                     }
                 </InputSelect>
             </div>
             <button class="btn btn-success btn-lg mt-4"
-                    disabled="@(Partida.Jugador1Id == 0)"
+                    disabled="@(Jugador1Id == 0)"
                     @onclick="StartGame">
                 Iniciar Partida
             </button>
         </div>
+
+        <hr class="my-4" />
+        <h4>Unirse a Partida Existente</h4>
+        </div>
+        <div class="form-group  mt-3">
+            <label class="form-label" for="partidaId">ID de la Partida:</label>
+            <div class="input-group">
+                <InputNumber class="form-select" @bind-Value="PartidaId"></InputNumber>
+            </div>
+            <button class="btn btn-primary btn-lg mt-4"
+                @onclick="JoinGame">
+                 Unirse
+            </button>
+
+        </div>
     </div>
-</div>
 
 
 @code {
-    public Partidas Partida { get; set; } = new Partidas();
-    public List<Jugadores> ListaJugadores { get; set; } = new List<Jugadores>();
+    public List<JugadorResponse> ListaJugadores { get; set; } = new List<JugadorResponse>();
+    private int Jugador1Id { get; set; }
+    private int? Jugador2Id { get; set; }
+    private int PartidaId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ListaJugadores = await jugadoresService.Listar(criterio: j => j.JugadorId > 0);
+        await LoadJugadores();
+    }
+
+    private async Task LoadJugadores()
+    {
+        var response = await jugadoresApiService.GetJugadoresAsync();
+        if (response is Resource<List<JugadorResponse>>.Success success)
+        {
+            ListaJugadores = success.Data;
+        }
+        else if (response is Resource<List<JugadorResponse>>.Error error)
+        {
+            Console.WriteLine("Hay bobo socio");
+        }
+    }
+
+    private async Task JoinGame()
+    {
+        var partida = (await partidaApiService.GetPartidaAsync(PartidaId)).Data;
+        Jugador2Id = partida.Jugador2Id;
+        if(Jugador1Id == partida.Jugador1Id || Jugador2Id == partida.Jugador2Id)
+        {
+            navigationManager.NavigateTo($"/game/{PartidaId}");
+        }
+        else
+        {
+            navigationManager.NavigateTo($"/game/{PartidaId}");
+        }
+
+        if (Jugador1Id != 0) Jugador2Id = partida.Jugador2Id; else Jugador1Id = partida.Jugador1Id;
+
+        var agregado = await partidaApiService.PutPartida(PartidaId, Jugador1Id, Jugador2Id);
+        if(agregado is Resource<PartidaResponse>.Success)
+        {
+            navigationManager.NavigateTo($"/game/{PartidaId}");
+        }
+        else return;
+
+
     }
 
     public async Task StartGame()
     {
-        if (Partida.Jugador2Id == null)
-            Partida.EstadoPartida = "Pendiente";
-        else
-            Partida.EstadoPartida = "En Curso";
-
-        Partida.TurnoJugadorId = Partida.Jugador1Id;
-        Partida.EstadoTablero = "---------";
-
-
-        var creado = await partidasService.Guardar(Partida);
-        if (creado)
+        var creado = await partidaApiService.PostPartida(Jugador1Id, Jugador2Id);
+        if (creado is Resource<PartidaResponse>.Success ok)
         {
-            navigationManager.NavigateTo("/game/" + Partida.PartidaId);
+            navigationManager.NavigateTo($"/game/{ok.Data.PartidaId}");
         }
     }
 }
