@@ -12,6 +12,7 @@
 <div class="container mx-auto max-w-lg p-6 bg-white rounded-lg shadow-xl text-center">
 
     <div class="game-container">
+        <h2>Partida: #@PartidaId</h2>
         <h2 class="game-status">@GameStatus</h2>
         
             <div class="game-screen">
@@ -44,7 +45,7 @@
     [Parameter]
     public int PartidaId { get; set; }
     private string Jugador1 { get; set; } = string.Empty;
-    private string Jugador2 { get; set; } = string.Empty;
+    private string? Jugador2 { get; set; } = string.Empty;
 
 
 
@@ -67,13 +68,21 @@
         }
     }
 
+
+    public async Task CargarJugador2()
+    {
+        var partida = await partidaApiService.GetPartidaAsync(PartidaId);
+    }
+
+
+
     public async Task CargarTablero()
     {
         var movimientos = await movimientosApiService.GetMovimientoAsync(PartidaId);
         foreach(var m in movimientos.Data)
         {
-            board[(m.PosicionFila * 3) + m.PosicionColumna] = Enum.Parse<PlayerType>(m.ToString());
-            _currentPlayerType = Enum.Parse<PlayerType>(m.ToString()) == PlayerType.X ? PlayerType.O : PlayerType.X;
+            board[(m.PosicionFila * 3) + m.PosicionColumna] = Enum.Parse<PlayerType>(m.Jugador);
+            _currentPlayerType = Enum.Parse<PlayerType>(m.Jugador) == PlayerType.X ? PlayerType.O : PlayerType.X;
         }
     }
 
@@ -82,7 +91,7 @@
     {
         var partida = await partidaApiService.GetPartidaAsync(PartidaId);
         Jugador1 = (await jugadoresApiService.GetJugadorAsync(partida.Data.Jugador1Id)).Data.Nombres;
-        Jugador2 = (await jugadoresApiService.GetJugadorAsync(partida.Data.Jugador2Id??0)).Data.Nombres;
+        Jugador2 = (await jugadoresApiService.GetJugadorAsync(partida.Data.Jugador2Id ?? 0)).Data.Nombres;
     }
 
     private async Task HandleCellClick(int index)
